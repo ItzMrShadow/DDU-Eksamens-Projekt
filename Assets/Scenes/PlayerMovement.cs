@@ -36,13 +36,15 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        readyToJump = true;
+        
     }
 
     private void Update()
     {
         // ground check
-        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
-
+        grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight, whatIsGround);
+        
         MyInput();
         SpeedControl();
 
@@ -65,7 +67,11 @@ public class PlayerMovement : MonoBehaviour
         // when to jump
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
+            readyToJump = false;
 
+            Jump();
+
+            Invoke(nameof(ResetJump), jumpCooldown);
         }
     }
 
@@ -74,7 +80,13 @@ public class PlayerMovement : MonoBehaviour
         // calculate movement direction
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
+        // on ground
+        if(grounded)
         rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+
+        // in air
+        else if(!grounded)
+            rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
     }
 
     private void SpeedControl()
@@ -90,6 +102,7 @@ public class PlayerMovement : MonoBehaviour
 
         
     }
+
     
     private void Jump()
     {

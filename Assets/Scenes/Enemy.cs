@@ -6,7 +6,7 @@ public class Enemy : MonoBehaviour
 {
     [Header("Stats")]
     public int health;
-
+    
     public void TakeDamage(int damage)
     {
         health -= damage;

@@ -16,9 +16,8 @@ public class ScoreManager : MonoBehaviour
         Instance = this;
         score = 0;
         AddScore(0);
-
-      
-        highscoreText.text = PlayerPrefs.GetInt("Highscore", 0).ToString();
+        highscore = PlayerPrefs.GetInt("Highscore", 0);
+        highscoreText.text = "HIGHSCORE: " + highscore.ToString();
 
         
     }
@@ -35,11 +34,11 @@ public class ScoreManager : MonoBehaviour
             {
 
                 highscore = score;
-                 
-                PlayerPrefs.SetInt("Highscore", highscore);
+           // highscoreText.text = "HIGHSCORE: " + highscore.ToString();
+            PlayerPrefs.SetInt("Highscore", highscore);
                 //highscore = score;
                
-                highscoreText.text = "HIGHSCORE: " + highscore.ToString();
+                
                 
             }
       
